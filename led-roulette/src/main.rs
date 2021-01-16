@@ -35,13 +35,13 @@ pub fn init() -> (Delay, Leds) {
 fn main() -> ! {
     let (mut delay, mut leds) = init();
 
-    let half_period = 500_u16;
+    let half_period = 100_u16;
 
     loop {
-        (0..8).into_iter().for_each(|led| {
-            leds[led].on();
+        leds.iter_mut().for_each(|led| {
+            led.on();
             delay.delay_ms(half_period);
-            leds[led].off();
+            led.off();
         })
     }
 }
