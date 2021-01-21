@@ -4,7 +4,6 @@
 #![no_std]
 #![no_main]
 
-#[allow(unused_extern_crates)] // NOTE(allow) bug rust-lang/rust#53964
 extern crate panic_halt; // panic handler
 
 pub use cortex_m_rt::entry;
@@ -35,13 +34,14 @@ pub fn init() -> (Delay, Leds) {
 fn main() -> ! {
     let (mut delay, mut leds) = init();
 
-    let half_period = 100_u16;
+    let half_period = 1000_u16 / 8;
+    let num_leds = leds.len();
 
     loop {
-        leds.iter_mut().for_each(|led| {
-            led.on();
+        (0..num_leds).into_iter().for_each(|led| {
+            leds[(led+3) % num_leds].on();
+            leds[led].off();
             delay.delay_ms(half_period);
-            led.off();
         })
     }
 }
